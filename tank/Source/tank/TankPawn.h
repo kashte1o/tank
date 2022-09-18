@@ -37,7 +37,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		float MovementSpeed = 100.0f;
-		//float Speed2 = 100.0f;
+		
 
 	float ForwardMoveAxisValue = 0.0f;
 	float RightMoveAxisValue = 0.0f;

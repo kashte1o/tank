@@ -19,7 +19,7 @@ public:
 	
 protected:
 	virtual void SetupInputComponent() override;
-	//virtual void SetupInputComponent() override;
+	
 
 private:
 	class ATankPawn* TankPawn;

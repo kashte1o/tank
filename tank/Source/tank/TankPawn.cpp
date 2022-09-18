@@ -44,7 +44,7 @@ void ATankPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	//MoveForward 
+	
 	FVector currentLocation = GetActorLocation();
 	FVector ForwardVector = GetActorForwardVector();
 	FVector RightVector = GetActorRightVector();
