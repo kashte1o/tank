@@ -14,8 +14,10 @@ public:
 	
 	ACannon();
 	void Fire();
+	void FireSpecial();
 	void Reload();
 	bool IsReadyToFire();
+	void Amount();
 	FTimerHandle ReloadTimer;
 protected:
 	
@@ -28,6 +30,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		ECannonType CannonType = ECannonType::FireProjecttile;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	ECannonType CannonTypeSpecial = ECannonType::FireProjecttileSpecial;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
 		float FireRate = 1.0f;
 
@@ -37,6 +43,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
 		float FireDamage = 1.0f;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
+		float ProjectileAmount = 10.0f;
 	virtual void BeginPlay() override;
 private:
 	bool bReadyToFire = false;

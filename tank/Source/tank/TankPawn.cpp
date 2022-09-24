@@ -72,6 +72,8 @@ void ATankPawn::Tick(float DeltaTime)
 	FRotator newRotation = FRotator(0.0f, yawRotation, 0.0f);
 	
 	SetActorRotation(newRotation);
+	
+	
 	//TurretRotation
 
 	
@@ -107,10 +109,18 @@ void ATankPawn::RotateRight(float Value)
 
 void ATankPawn::SetupCannon()
 {
+
+	if (!CannonClass)
+	{
+		return;
+	}
+	
 	if (Cannon)
 	{
 		Cannon->Destroy();
 	}
+
+	
 	FActorSpawnParameters params;
 	params.Instigator = this;
 	params.Owner = this;
@@ -127,6 +137,16 @@ void ATankPawn::Fire()
 
 	}
 
+}
+
+void ATankPawn::FireSpecial()
+{
+	if (Cannon)
+	{
+
+		Cannon->FireSpecial();
+
+	}
 }
 
 

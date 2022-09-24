@@ -10,9 +10,12 @@ UENUM(BlueprintType)
 enum class ECannonType : uint8
 {
 
-	FireProjecttile = 0,
-	FireTrace = 1,
+	FireProjecttile = 0 UMETA(DisplayName = "Use Projecttile"),
+	FireTrace = 1 UMETA(DisplayName = "Use trace"),
+	FireProjecttileSpecial = 2 UMETA(DisplayName = "Use Projecttile Special"),
+	FireTraceSpecial = 3 UMETA(DisplayName = "Use Trace Special")
 };
+
 UCLASS()
 class TANK_API UGameStructs : public UObject
 {

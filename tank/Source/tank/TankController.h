@@ -35,4 +35,6 @@ private:
 	void MoveRight(float Value);
 	FVector MousePos;
 	void RotateRight(float Value);
+	void Fire();
+	void FireSpecial();
 };

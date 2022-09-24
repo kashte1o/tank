@@ -6,8 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
 class UStaticMeshComponents;
-class ACannon
-	UCLASS();
+class ACannon;
+	UCLASS()
 class TANK_API ATankPawn : public APawn
 {
 	GENERATED_BODY()
@@ -22,6 +22,7 @@ public:
 
 	void SetupCannon();
 	void Fire();
+	void FireSpecial();
 protected:
 	virtual void BeginPlay() override;
 
@@ -41,10 +42,10 @@ protected:
 		class UCameraComponent* Camera;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon")
-		TSubclassOf<ACannon> CannonClass
+		TSubclassOf<ACannon> CannonClass;
 
 
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon");
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon")
 		class UArrowComponent* CannonSetupPoint;
 	
 	UPROPERTY()

@@ -29,6 +29,8 @@ ACannon::ACannon()
 
 	}
 	*/
+
+
 	void ACannon::Fire()
 	{
 		if (!IsReadyToFire())
@@ -50,8 +52,32 @@ ACannon::ACannon()
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, false);
 	}
 
+	void ACannon::FireSpecial()
+	{
+		if (!IsReadyToFire())
+		{
+			return;
+		}
+		bReadyToFire = false;
+		
+		if (CannonType == ECannonType::FireProjecttileSpecial)
+		{
+
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Fire projecttile special %f")));
+		}
+		else
+			if(CannonType == ECannonType::FireTraceSpecial)
+		{
+
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Fire trace special %f")));
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, true);
+
+	}
 
 
+	
 	void ACannon::Reload()
 	{
 
@@ -64,8 +90,19 @@ ACannon::ACannon()
 
 	}
 
+	void ACannon::Amount()
+	{
+		if (ProjectileAmount == 0)
+		{
+			return;
+		}
+
+
+	}
+
 	void ACannon::BeginPlay()
 	{
 		Super::BeginPlay();
 		Reload();
 	}
+	
