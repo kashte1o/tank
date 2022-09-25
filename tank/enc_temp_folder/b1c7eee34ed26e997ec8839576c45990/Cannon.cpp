@@ -166,7 +166,7 @@ ACannon::ACannon()
 	{
 
 		bReadyToFire = true;
-		GetWorld()->GetTimerManager().SetTimer(AutoTimer, this, &ACannon::Fire, 1 / FireRate, true, 3 / FireRate);
+		GetWorld()->GetTimerManager().SetTimer(AutoTimer, this, &ACannon::Fire, 1 / FireRate, true, 10 / FireRate);
 	}
 
 	bool ACannon::IsReadyToFire()

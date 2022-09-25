@@ -149,5 +149,13 @@ void ATankPawn::FireSpecial()
 	}
 }
 
+void ATankPawn::AutoFire()
+{
+	if (Cannon)
+	{
 
+		Cannon->AutoFire();
+
+	}
+}
 

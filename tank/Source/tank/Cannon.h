@@ -15,10 +15,14 @@ public:
 	ACannon();
 	void Fire();
 	void FireSpecial();
+	void AutoFire();
 	void Reload();
+	void ReloadAuto();
 	bool IsReadyToFire();
-	void Amount();
+	
+	
 	FTimerHandle ReloadTimer;
+	FTimerHandle AutoTimer;
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -44,7 +48,7 @@ protected:
 		float FireDamage = 1.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
-		float ProjectileAmount = 10.0f;
+		float ProjectileAmount = 12.0f;
 	virtual void BeginPlay() override;
 private:
 	bool bReadyToFire = false;
