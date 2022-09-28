@@ -18,6 +18,10 @@ enum class ECannonType : uint8
 	AutoFireProjectile = 5 UMETA(DisplayName = "Use Projectile Auto"),
 };
 
+
+/*USTRUCT()
+struct FdamageData
+*/
 UCLASS()
 class TANK_API UGameStructs : public UObject
 {

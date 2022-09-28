@@ -6,6 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "TimerManager.h"
 #include "Engine/Engine.h"
+#include "Projectile.h"
 
 ACannon::ACannon()
 {
@@ -16,8 +17,8 @@ ACannon::ACannon()
 	RootComponent = sceneComp;
 	CannonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CannonMesh"));
 	CannonMesh->SetupAttachment(sceneComp);
-	ProjecttileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjecttileSpawnPoint"));
-	ProjecttileSpawnPoint->SetupAttachment(CannonMesh);
+	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjecttileSpawnPoint"));
+	ProjectileSpawnPoint->SetupAttachment(CannonMesh);
 
 }
 
@@ -41,7 +42,7 @@ ACannon::ACannon()
 			return;
 		}
 		bReadyToFire = false;
-		if (ProjectileAmount == 0)
+		if (ProjectileAmount <= 0)
 		{
 			return;
 		}
@@ -49,13 +50,46 @@ ACannon::ACannon()
 		{
 
 			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projecttile %f")));
+			FActorSpawnParameters spawnParams;
+			spawnParams.Owner = this;
+			AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation(), spawnParams);
+			
+			if (projectile)
+			{
+				projectile->Start();
+
+			}
 		}
 		else
 			if (CannonType == ECannonType::FireTrace)
 		{
 
 			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire trace %f")));
-		}
+			FHitResult hitResult;
+			FCollisionQueryParams traceParams;
+		
+			traceParams.bTraceComplex = true;
+			traceParams.bReturnPhysicalMaterial = false;
+
+			FVector Start = ProjectileSpawnPoint->GetComponentLocation();
+			FVector End = Start + ProjectileSpawnPoint->GetForwardVector() * FireRange;
+			if (GetWorld()->LineTraceSingleByChannel(hitResult, Start, End, ECollisionChannel::ECC_Visibility, traceParams))
+			{
+				DrawDebugLine(GetWorld(), Start, hitResult.Location, FColor::Purple, false,1.0f, 0, 5.0f);
+				if (hitResult.GetActor())
+				{
+					UE_LOG(LogTemp, Warning, TEXT("trace overlap : %s"), *hitResult.GetActor()->GetName());
+					hitResult.GetActor()->Destroy();
+				}
+			}
+			else
+			{
+				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.0f, 0, 2.0f);
+			}
+			}
+		
+
+		
 
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, false);
 		
@@ -71,7 +105,7 @@ ACannon::ACannon()
 		}
 		bReadyToFire = false;
 		
-		if (ProjectileAmount == 0)
+		if (ProjectileAmount <= 0)
 		{
 			return;
 		}
@@ -102,7 +136,7 @@ ACannon::ACannon()
 		}
 		bReadyToFire = false;
 
-		if (ProjectileAmount == 0)
+		if (ProjectileAmount <= 0)
 		{
 			return;
 		}
@@ -138,7 +172,7 @@ ACannon::ACannon()
 			*/
 		if ((ProjectileAmount > 0))
 		{
-			GetWorld()->GetTimerManager().SetTimer(AutoTimer, this, &ACannon::ReloadAuto, 10 / FireRate, false);
+			GetWorld()->GetTimerManager().SetTimer(AutoTimer, this, &ACannon::ReloadAuto, 10 / FireRate, true);
 			ProjectileAmount = ProjectileAmount - 1;
 			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Projectile Amount = %f"), ProjectileAmount));
 			ProjectileAmount = ProjectileAmount - 1;
@@ -166,13 +200,18 @@ ACannon::ACannon()
 	{
 
 		bReadyToFire = true;
-		GetWorld()->GetTimerManager().SetTimer(AutoTimer, this, &ACannon::Fire, 1 / FireRate, true, 3 / FireRate);
+		GetWorld()->GetTimerManager().SetTimer(AutoTimer, this, &ACannon::AutoFire, 1 / FireRate, false, 3 / FireRate);
 	}
 
 	bool ACannon::IsReadyToFire()
 	{
 		return bReadyToFire;
 
+	}
+
+	void ACannon::Change()
+	{
+		ProjectileAmount = ProjectileAmount + 12;
 	}
 
 	

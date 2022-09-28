@@ -20,7 +20,7 @@ public:
 	void MoveRight(float Value);
 	void RotateRight(float Value);
 
-	void SetupCannon();
+	void SetupCannon(TSubclassOf<ACannon> newCannon);
 	void Fire();
 	void FireSpecial();
 	void AutoFire();
