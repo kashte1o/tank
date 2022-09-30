@@ -29,6 +29,11 @@ ATurret::ATurret()
 		TurretMesh->SetStaticMesh(turretMeshTemp);
 }
 
+void ATurret::TakeDamage(FDamageData DamageData)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f"), *GetName(), DamageData.DamageValue);
+}
+
 
 void ATurret::BeginPlay()
 {
@@ -56,7 +61,7 @@ void ATurret::Targeting()
 	{
 		RotateToPlayer();
 	}
-	if (CanFire() )
+	if (CanFire() && Cannon && Cannon->IsReadyToFire())
 	{
 		Fire();
 	}

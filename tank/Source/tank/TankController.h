@@ -38,4 +38,5 @@ private:
 	void Fire();
 	void FireSpecial();
 	void AutoFire();
+	void ChangeCannon();
 };

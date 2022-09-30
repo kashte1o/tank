@@ -19,9 +19,25 @@ enum class ECannonType : uint8
 };
 
 
-/*USTRUCT()
-struct FdamageData
-*/
+USTRUCT()
+struct FDamageData
+{
+	GENERATED_BODY()
+		
+		UPROPERTY()
+		float DamageValue;
+	
+	UPROPERTY()
+		AActor* Instigator;
+
+	UPROPERTY()
+		AActor* DamageMaker;
+	
+	UPROPERTY()
+		AActor* DamageTaker;
+
+
+};
 UCLASS()
 class TANK_API UGameStructs : public UObject
 {

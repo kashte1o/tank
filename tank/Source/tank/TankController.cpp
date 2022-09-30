@@ -24,6 +24,7 @@ void ATankController::SetupInputComponent()
 	InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ATankController::Fire);
 	InputComponent->BindAction("FireSpecial", EInputEvent::IE_Pressed, this, &ATankController::FireSpecial);
 	InputComponent->BindAction("AutoFire", EInputEvent::IE_Pressed, this, &ATankController::AutoFire);
+	InputComponent->BindAction("ChangeCannon", EInputEvent::IE_Pressed, this, &ATankController::ChangeCannon);
 }
 
 void ATankController::Tick(float DeltaSeconds)
@@ -32,12 +33,15 @@ void ATankController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	FVector MouseDirection;
 	DeprojectMousePositionToWorld(MousePos, MouseDirection);
-	FVector tankPosition = TankPawn->GetActorLocation();
-	MousePos.Z = tankPosition.Z;
-	FVector dir = MousePos - tankPosition;
-	dir.Normalize();
-	MousePos = tankPosition + dir * 1000;
-	DrawDebugLine(GetWorld(), tankPosition, MousePos, FColor::Green, false, 0.1f, 0, 5);
+	if (TankPawn)
+	{
+		FVector tankPosition = TankPawn->GetActorLocation();
+		MousePos.Z = tankPosition.Z;
+		FVector dir = MousePos - tankPosition;
+		dir.Normalize();
+		MousePos = tankPosition + dir * 1000;
+	}
+	//DrawDebugLine(GetWorld(), tankPosition, MousePos, FColor::Green, false, 0.1f, 0, 5);
 
 
 }
@@ -98,6 +102,20 @@ void ATankController::AutoFire()
 	{
 		TankPawn->AutoFire();
 	}
+
+
+}
+
+void ATankController::ChangeCannon()
+{
+	if (TankPawn)
+	{
+		TankPawn->ChangeCannon();
+
+
+
+	}
+
 
 
 }

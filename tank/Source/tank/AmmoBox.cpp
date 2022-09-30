@@ -1,14 +1,14 @@
-#include "AmmoBox.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/World.h"
-#include "GameFramework/PlayerController.h"
+
 
 
 
 #include "AmmoBox.h"
 #include "TankPawn.h"
 #include "Cannon.h"
-#include "Cannon.cpp"
+
+
+
+
 
 
 AAmmoBox::AAmmoBox()
@@ -34,7 +34,7 @@ void AAmmoBox::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	if (TankPawn)
 	{
 		TankPawn->SetupCannon(CannonClass);
-		
+		ACannon* Cannon = TankPawn->GetCannon();
 		
 	}
 	Destroy();

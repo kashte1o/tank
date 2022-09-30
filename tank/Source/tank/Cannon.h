@@ -24,7 +24,7 @@ public:
 	
 	FTimerHandle ReloadTimer;
 	FTimerHandle AutoTimer;
-	void Change();
+	
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -45,6 +45,16 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
 		float FireRate = 1.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+		int32 Shells = 10;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+		int32 BustSize = 10;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+		float BustInterval = 0.1f;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
 		float FireRange = 1000.0f;
@@ -52,11 +62,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
 		float FireDamage = 1.0f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire params")
-		float ProjectileAmount = 12.0f;
+	
 	
 	
 	virtual void BeginPlay() override;
 private:
 	bool bReadyToFire = false;
+	int32 CurrentBurts = 0;
 };

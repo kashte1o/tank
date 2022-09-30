@@ -45,7 +45,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 	TankController = Cast<ATankController>(GetController());
 
-	SetupCannon(CannonClass);
+	SetupCannon(EquippedCannonClass);
 	
 }
 
@@ -161,3 +161,15 @@ void ATankPawn::AutoFire()
 	}
 }
 
+void ATankPawn::ChangeCannon()
+{
+	TSubClassOf<ACannon> CachedCannon;
+	CachedCannon = EquippedCannonClass;
+	EquippedCannonClass = SecondCannonClass;
+	SecondCannonClass = CachedCannon;
+	SetupCannon(EquippedCannonClass);
+		
+
+
+
+}

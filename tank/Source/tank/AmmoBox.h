@@ -26,4 +26,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		TSubclassOf<class ACannon> CannonClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+		int32 newShells = 10;
 };

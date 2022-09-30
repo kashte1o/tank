@@ -7,12 +7,14 @@
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameStructs.h"
 #include "Cannon.h"
+#include "DamageTaker.h"
 #include "Turret.generated.h"
 
 class ACannon;
 UCLASS()
-class TANK_API ATurret : public AActor
+class TANK_API ATurret : public AActor, public IDamageTaker
 {
 	GENERATED_BODY()
 	
@@ -20,19 +22,21 @@ public:
 	
 	ATurret();
 
-	virtual void Tick(float DeltaTime) override;
-	void Targeting();
-	
-	void RotateToPlayer();
-	bool IsPlayerInRange();
-	bool CanFire();
-	void Fire();
-	void SetupCannon();
+	UFUNCTION()
+		void TakeDamage(FDamageData DamageData) override;
 
 protected:
 
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
+	virtual void Tick(float DeltaTime) override;
+	void Targeting();
+
+	void RotateToPlayer();
+	bool IsPlayerInRange();
+	bool CanFire();
+	void Fire();
+	void SetupCannon();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 		UStaticMeshComponent* BodyMesh;
@@ -48,7 +52,8 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	class  UArrowComponent* CannonSetupPoint;
-
+	
+	
 
 	UPROPERTY()
 		ACannon* Cannon;
@@ -57,8 +62,8 @@ protected:
 		APawn* PlayerPawn;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting params")
-		
-		float TargetingRange = 1000.f;
+			float TargetingRange = 1000;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting params")
 		
 		float TargetingSpeed = 0.1f;

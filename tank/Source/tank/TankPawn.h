@@ -24,6 +24,7 @@ public:
 	void Fire();
 	void FireSpecial();
 	void AutoFire();
+	ACannon* GetCannon() const { return Cannon; }
 protected:
 	virtual void BeginPlay() override;
 
@@ -43,14 +44,17 @@ protected:
 		class UCameraComponent* Camera;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon")
-		TSubclassOf<ACannon> CannonClass;
+		TSubclassOf<ACannon> EquippedCannonClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon")
+		TSubclassOf<ACannon> SecondCannonClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon")
 		class UArrowComponent* CannonSetupPoint;
 	
 	UPROPERTY()
 		ACannon* Cannon;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		float MovementSpeed = 100.0f;
