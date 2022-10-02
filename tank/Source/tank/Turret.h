@@ -37,6 +37,9 @@ protected:
 	bool CanFire();
 	void Fire();
 	void SetupCannon();
+	
+	void DamageTaked(float Value);
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 		UStaticMeshComponent* BodyMesh;
@@ -53,6 +56,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	class  UArrowComponent* CannonSetupPoint;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+		class  UHealthComponent* HealthComponent;
 	
 
 	UPROPERTY()
@@ -62,7 +67,7 @@ protected:
 		APawn* PlayerPawn;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting params")
-			float TargetingRange = 1000;
+			float TargetingRange = 1000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting params")
 		
@@ -72,7 +77,7 @@ protected:
 		float TargetingRate = 0.005f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting params")
-		float Accurency = 10;
+		float Accurency = 10.f;
 
 		const FString BodyMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Tower1.SM_CSC_Tower1'";
 	const FString TurretMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Gun1.SM_CSC_Gun1'";

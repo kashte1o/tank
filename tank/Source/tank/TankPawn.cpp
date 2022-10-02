@@ -9,6 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/StaticMeshComponent.h"
 #include "Cannon.h"
+#include "HealthComponent.h"
 #include "Components/ArrowComponent.h"
 // Sets default values
 ATankPawn::ATankPawn()
@@ -37,6 +38,10 @@ ATankPawn::ATankPawn()
 
 	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSetupPoint"));
 	CannonSetupPoint->SetupAttachment(TurretMesh);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnDie.AddUObject(this, &ATankPawn::Die);
+	HealthComponent->OnHealthChanged.AddUObject(this, &ATankPawn::DamageTaked);
 }
 
 
@@ -163,7 +168,7 @@ void ATankPawn::AutoFire()
 
 void ATankPawn::ChangeCannon()
 {
-	TSubClassOf<ACannon> CachedCannon;
+	TSubclassOf<ACannon> CachedCannon;
 	CachedCannon = EquippedCannonClass;
 	EquippedCannonClass = SecondCannonClass;
 	SecondCannonClass = CachedCannon;
@@ -171,5 +176,27 @@ void ATankPawn::ChangeCannon()
 		
 
 
+
+}
+
+void ATankPawn::TakeDamage(FDamageData DamageData)
+{
+	HealthComponent->TakeDamage(DamageData);
+
+}
+
+void ATankPawn::DamageTaked(float Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s taked damage: %f, health: %f "), *GetName(), Value, HealthComponent->GetHealth());
+
+}
+
+void ATankPawn::Die()
+{
+	if (Cannon)
+	{
+		Cannon->Destroy();
+	}
+	Destroy();
 
 }

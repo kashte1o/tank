@@ -30,12 +30,13 @@ struct FDamageData
 	UPROPERTY()
 		AActor* Instigator;
 
-	UPROPERTY()
-		AActor* DamageMaker;
+	
 	
 	UPROPERTY()
 		AActor* DamageTaker;
-
+	
+	UPROPERTY()
+		AActor* DamageMaker;
 
 };
 UCLASS()

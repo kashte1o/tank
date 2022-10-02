@@ -5,33 +5,47 @@
 #include <Components\StaticMeshComponent.h>
 #include <Components\ArrowComponent.h>
 #include <Engine\StaticMesh.h>
+
 #include <Kismet/KismetMathLibrary.h>
+#include "HealthComponent.h"
 
 ATurret::ATurret()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
+
 	HitCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	RootComponent = HitCollision;
+
 	BodyMesh = CreateDefaultSubobject< UStaticMeshComponent>(TEXT("BodyMesh"));
 	BodyMesh->SetupAttachment(HitCollision);
+	
 	TurretMesh = CreateDefaultSubobject< UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretMesh->SetupAttachment(BodyMesh);
+
 	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSetupPoint"));
 	CannonSetupPoint->SetupAttachment(TurretMesh);
 
 	UStaticMesh* bodyMeshTemp = LoadObject<UStaticMesh>(this, *BodyMeshPath);
 	if (bodyMeshTemp)
+	{
+
 	BodyMesh->SetStaticMesh(bodyMeshTemp);
+	}
 	
 	UStaticMesh* turretMeshTemp = LoadObject<UStaticMesh>(this, *TurretMeshPath);
 	if (turretMeshTemp)
+	{
 		TurretMesh->SetStaticMesh(turretMeshTemp);
+	}
+	HealthComponent =CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnDie.AddUObject(this, &ATurret::Destroyed);
+	HealthComponent->OnHealthChanged.AddUObject(this,&ATurret::DamageTaked);
 }
 
 void ATurret::TakeDamage(FDamageData DamageData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f"), *GetName(), DamageData.DamageValue);
+	HealthComponent->TakeDamage(DamageData);
 }
 
 
@@ -60,12 +74,13 @@ void ATurret::Targeting()
 	if (IsPlayerInRange())
 	{
 		RotateToPlayer();
-	}
-	if (CanFire() && Cannon && Cannon->IsReadyToFire())
+	
+	if (CanFire())
 	{
 		Fire();
 	}
-
+	}
+	
 }
 
 void ATurret::Destroyed()
@@ -75,6 +90,7 @@ void ATurret::Destroyed()
 		Cannon->Destroyed();
 
 	}
+	Destroy();
 }
 
 void ATurret::RotateToPlayer()
@@ -121,5 +137,16 @@ void ATurret::SetupCannon()
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 }
+
+
+
+void ATurret::DamageTaked(float Value)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f, health: %f "), *GetName(), Value, HealthComponent-> GetHealth());
+
+
+}
+
 
 

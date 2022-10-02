@@ -37,7 +37,7 @@ ACannon::ACannon()
 		if (CannonType == ECannonType::FireProjecttile)
 		{
 
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projecttile %f")));
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projecttile")));
 			FActorSpawnParameters spawnParams;
 			spawnParams.Owner = this;
 			AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation(), spawnParams);
@@ -83,7 +83,7 @@ ACannon::ACannon()
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, false);
 		
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Shells = %f"), Shells));
+		
 	}
 
 	void ACannon::FireSpecial()
@@ -98,19 +98,19 @@ ACannon::ACannon()
 		if (CannonType == ECannonType::FireProjecttile)
 		{
 
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Fire projecttile special %f")));
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Fire projecttile special")));
 		}
 		else
 			if(CannonType == ECannonType::FireTraceSpecial)
 		{
 
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Fire trace special %f")));
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Fire trace special")));
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, false);
 
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Shells = %f"), Shells));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Shells = %d"), Shells));
 	}
 
 	void ACannon::AutoFire()
@@ -131,8 +131,11 @@ ACannon::ACannon()
 	{
 
 		bReadyToFire = true;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Shells: %d"), Shells));
 		
 	}
+	
+	
 	void ACannon::ReloadAuto()
 	{
 
@@ -142,7 +145,7 @@ ACannon::ACannon()
 			bReadyToFire = true;
 			CurrentBurts = 0;
 			Shells--;
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Shells is = %f"), Shells));
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Shells: %d"), Shells));
 			return;
 		}
 		CurrentBurts++;
@@ -190,6 +193,14 @@ ACannon::ACannon()
 
 	}
 
+	void ACannon::AddShells(int32 newShells)
+	{
+		Shells += newShells;
+
+
+
+	}
+
 
 	
 
@@ -199,7 +210,7 @@ ACannon::ACannon()
 		Super::BeginPlay();
 		Reload();
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Shells= %f"), Shells));
+		
 	}
 	
 	

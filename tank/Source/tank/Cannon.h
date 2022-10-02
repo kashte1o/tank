@@ -19,11 +19,15 @@ public:
 	void AutoFire();
 	void Reload();
 	void ReloadAuto();
+	
 	bool IsReadyToFire();
 	
 	
 	FTimerHandle ReloadTimer;
 	FTimerHandle AutoTimer;
+	
+
+	void AddShells(int32  newShells);
 	
 protected:
 	

@@ -40,28 +40,31 @@ void AProjectile::Move()
 
 void AProjectile::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
-	IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(OtherActor);
-	if (DamageTakerActor)
+	if (OtherActor)
 	{
-		FDamageData damageData;
-		damageData.DamageValue = Damage;
-		damageData.Instigator = GetOwner();
-		damageData.DamageMaker = this;
+		IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(OtherActor);
+
+		if (DamageTakerActor)
+		{
+			FDamageData damageData;
+			damageData.DamageValue = Damage;
+			damageData.Instigator = GetOwner();
+			damageData.DamageMaker = this;
+
+			DamageTakerActor->TakeDamage(damageData);
+		}
+		else
+		{
+			OtherActor->Destroy();
+		}
 		
-		DamageTakerActor->TakeDamage(damageData);
 	}
 	
-	else
-	{
-		OtherActor->Destroy();
-	}
 	UE_LOG(LogTemp, Warning, TEXT("Projectile overlap : %s"), *OtherActor->GetName());
 	Destroy();
 
 
 }
-
 
 
 

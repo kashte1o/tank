@@ -7,29 +7,36 @@
 #include "GameStructs.h"
 #include "HealthComponent.generated.h"
 
+DECLARE_EVENT(UHealthComponent, FOnDie);
+DECLARE_EVENT_OneParam(UHealthComponent, FOnHealthChanged, float);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TANK_API UHealthComponent : public UActorComponent
 {
 	
-		GENERATED_BODY()
-			DECLARE_EVENT(UHealthComponent, FOnDie)
-			DECLARE_EVENT_OneParam(UHealthComponent, FOnHealthChanged, float)
+	GENERATED_BODY()
+		
 	protected:
-		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health values")
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health value")
 			float MaxHealth = 10;
-		UPROPERTY()
+		
+		//UPROPERTY()
 			float CurrentHealth;
+		
 	public:
+		
 		FOnDie OnDie;
-		FOnHealthChanged OnDamaged;
-	public:
-		// Sets default values for this component's properties
-		UHealthComponent();
+		FOnHealthChanged OnHealthChanged;
+		void AddHealth(float newHealth);
 		void TakeDamage(FDamageData DamageData);
 		float GetHealth() const;
 		float GetHealthState() const;
-		void AddHealth(float AddiditionalHealthValue);
+	protected:
+		
+		UHealthComponent();
+		virtual void BeginPlay() override;
+		//void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction);
+		
 	
 
 		
