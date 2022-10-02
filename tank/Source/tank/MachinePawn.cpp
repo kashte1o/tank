@@ -7,7 +7,7 @@
 AMachinePawn::AMachinePawn()
 {
  	
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 }
 
