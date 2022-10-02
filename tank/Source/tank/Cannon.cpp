@@ -62,6 +62,7 @@ ACannon::ACannon()
 				FVector Start = ProjectileSpawnPoint->GetComponentLocation();
 				FVector End = Start + ProjectileSpawnPoint->GetForwardVector() * FireRange;
 
+
 				if (GetWorld()->LineTraceSingleByChannel(hitResult, Start, End, ECollisionChannel::ECC_Visibility, traceParams))
 				{
 					DrawDebugLine(GetWorld(), Start, hitResult.Location, FColor::Purple, false, 1.0f, 0, 5.0f);

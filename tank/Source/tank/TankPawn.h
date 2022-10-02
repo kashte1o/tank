@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "DamageTaker.h"
+#include "MachinePawn.h"
 #include "TankPawn.generated.h"
+
 class UStaticMeshComponents;
 class ACannon;
 	UCLASS()
-class TANK_API ATankPawn : public APawn, public IDamageTaker
+class TANK_API ATankPawn : public AMachinePawn, public IDamageTaker
 {
 	GENERATED_BODY()
 
@@ -26,6 +28,10 @@ public:
 	void FireSpecial();
 	void AutoFire();
 	void ChangeCannon();
+	UFUNCTION(BlueprintCallable)
+		class UHealthComponent* GetHealthComponent() const  { return HealthComponent; }
+
+	UFUNCTION()
 	virtual void TakeDamage(FDamageData DamageData) override;
 	
 	ACannon* GetCannon() const { return Cannon; }

@@ -20,8 +20,7 @@ class TANK_API UHealthComponent : public UActorComponent
 		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health value")
 			float MaxHealth = 10;
 		
-		//UPROPERTY()
-			float CurrentHealth;
+	
 		
 	public:
 		
@@ -30,13 +29,15 @@ class TANK_API UHealthComponent : public UActorComponent
 		void AddHealth(float newHealth);
 		void TakeDamage(FDamageData DamageData);
 		float GetHealth() const;
+
+		UFUNCTION(BlueprintCallable)
 		float GetHealthState() const;
 	protected:
 		
 		UHealthComponent();
 		virtual void BeginPlay() override;
-		//void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction);
 		
+		float CurrentHealth;
 	
 
 		

@@ -10,11 +10,12 @@
 #include "GameStructs.h"
 #include "Cannon.h"
 #include "DamageTaker.h"
+#include "MachinePawn.h"
 #include "Turret.generated.h"
 
 class ACannon;
 UCLASS()
-class TANK_API ATurret : public AActor, public IDamageTaker
+class TANK_API ATurret : public AMachinePawn, public IDamageTaker
 {
 	GENERATED_BODY()
 	
