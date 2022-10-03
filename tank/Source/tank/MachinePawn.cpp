@@ -1,9 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+
 
 
 #include "MachinePawn.h"
 
-// Sets default values
+
 AMachinePawn::AMachinePawn()
 {
  	
@@ -11,24 +11,19 @@ AMachinePawn::AMachinePawn()
 
 }
 
-// Called when the game starts or when spawned
+
 void AMachinePawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
-void AMachinePawn::Tick(float DeltaTime)
+
+void AMachinePawn::SetupCannon()
 {
-	Super::Tick(DeltaTime);
-
+	FActorSpawnParameters params;
+	params.Instigator = this;
+	params.Owner = this;
+	Cannon = GetWorld()->SpawnActor<ACannon>(newCannon, params);
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
-
-// Called to bind functionality to input
-void AMachinePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-

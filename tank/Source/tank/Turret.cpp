@@ -87,7 +87,7 @@ void ATurret::Destroyed()
 {
 	if (Cannon)
 	{
-		Cannon->Destroyed();
+		Cannon->Destroy();
 
 	}
 	Destroy();
