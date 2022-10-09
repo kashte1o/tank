@@ -12,7 +12,7 @@ class TANK_API ACannon : public AActor
 	GENERATED_BODY()
 	
 public:	
-	
+	UStaticMeshComponent* GetCannonMesh() const { return CannonMesh; }
 	ACannon();
 	void Fire();
 	void FireSpecial();
@@ -30,15 +30,16 @@ public:
 	void AddShells(int32  newShells);
 	
 protected:
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UStaticMeshComponent* CannonMesh;
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UArrowComponent* ProjectileSpawnPoint;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		TSubclassOf<class AProjectile> ProjectileClass;
+	
+	
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -67,7 +68,19 @@ protected:
 		float FireDamage = 1.0f;
 	
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		class UAudioComponent* ShotSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		class UParticleSystemComponent* ShotEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		class UParticleSystemComponent* Enemykill;
+
 	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		TSubclassOf<UCameraShakeBase> CameraShake;
 	
 	virtual void BeginPlay() override;
 private:

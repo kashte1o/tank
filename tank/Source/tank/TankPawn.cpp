@@ -9,8 +9,10 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/StaticMeshComponent.h"
 #include "Cannon.h"
+//#include "Cannon.cpp"
 #include "HealthComponent.h"
 #include "Components/ArrowComponent.h"
+#include <Kismet/GameplayStatics.h>
 // Sets default values
 ATankPawn::ATankPawn()
 {
@@ -42,7 +44,34 @@ ATankPawn::ATankPawn()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddUObject(this, &ATankPawn::Die);
 	HealthComponent->OnHealthChanged.AddUObject(this, &ATankPawn::DamageTaked);
+
+	/*HitEnemy = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HitEnemy"));
+	HitEnemy->SetAutoActivate(false);
+	HitEnemy->SetupAttachment(ProjectileMes);
+	*/
+
+	
 }
+
+
+void ATankPawn::RotateTurretTo(FVector TargetPosition)
+{
+	FRotator targetRotaion = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetPosition);
+	FRotator turretRotation = TurretMesh->GetComponentRotation();
+	targetRotaion.Pitch = turretRotation.Pitch;
+	targetRotaion.Pitch = turretRotation.Roll;
+	TurretMesh->SetWorldRotation(FMath::Lerp(targetRotaion, turretRotation, TurretInterpolationKey));
+
+
+
+
+}
+
+FVector ATankPawn::GetEyesPosition() const
+{
+	return CannonSetupPoint->GetComponentLocation();
+}
+
 
 
 void ATankPawn::BeginPlay()
@@ -85,11 +114,7 @@ void ATankPawn::Tick(float DeltaTime)
 		if (TankController)
 		{
 			FVector MousePos = TankController -> GetMousePos();
-			FRotator targetRotaion = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), MousePos);
-			FRotator turretRotation = TurretMesh->GetComponentRotation();
-			targetRotaion.Pitch = turretRotation.Pitch;
-			targetRotaion.Pitch = turretRotation.Roll;
-			TurretMesh->SetWorldRotation(FMath::Lerp(targetRotaion, turretRotation, TurretInterpolationKey));
+			RotateTurretTo(MousePos);
 
 		}
 	
@@ -126,12 +151,13 @@ void ATankPawn::SetupCannon(TSubclassOf<ACannon> newCannon)
 	}
 
 	
+	
 	FActorSpawnParameters params;
 	params.Instigator = this;
 	params.Owner = this;
 	Cannon = GetWorld()->SpawnActor<ACannon>(newCannon, params);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
-
+	
 }
 
 
@@ -182,6 +208,7 @@ void ATankPawn::ChangeCannon()
 void ATankPawn::TakeDamage(FDamageData DamageData)
 {
 	HealthComponent->TakeDamage(DamageData);
+	
 
 }
 
@@ -198,5 +225,5 @@ void ATankPawn::Die()
 		Cannon->Destroy();
 	}
 	Destroy();
-
+	Template = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, GetActorLocation());
 }

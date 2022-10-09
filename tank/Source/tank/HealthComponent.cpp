@@ -36,16 +36,15 @@ void UHealthComponent::TakeDamage(FDamageData DamageData)
 		if (OnDie.IsBound())
 
 			OnDie.Broadcast();
-	}
+
 		else
 		{
 			if (OnHealthChanged.IsBound())
-			
 				OnHealthChanged.Broadcast(takeDamageValue);
-			
+
 		}
 
-	
+	}
 
 }
 
@@ -65,11 +64,3 @@ float UHealthComponent::GetHealthState() const
 
 
 
-/*void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-*/

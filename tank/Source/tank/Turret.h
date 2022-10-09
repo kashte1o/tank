@@ -4,18 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/ArrowComponent.h"
-#include "Components/BoxComponent.h"
-#include "GameFramework/Actor.h"
-#include "GameStructs.h"
-#include "Cannon.h"
 #include "DamageTaker.h"
-#include "MachinePawn.h"
+#include "GameStructs.h"
 #include "Turret.generated.h"
 
 class ACannon;
 UCLASS()
-class TANK_API ATurret : public AMachinePawn, public IDamageTaker
+class TANK_API ATurret : public AActor, public IDamageTaker
 {
 	GENERATED_BODY()
 	
@@ -25,12 +20,15 @@ public:
 
 	UFUNCTION()
 		void TakeDamage(FDamageData DamageData) override;
+	
+	FVector GetEyesPosition();
+	
 
 protected:
 
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 	void Targeting();
 
 	void RotateToPlayer();
@@ -60,6 +58,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 		class  UHealthComponent* HealthComponent;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+		class UParticleSystem* Particle;
+	
+	UParticleSystemComponent* Template;
 
 	UPROPERTY()
 		ACannon* Cannon;

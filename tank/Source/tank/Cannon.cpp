@@ -4,8 +4,10 @@
 #include "Cannon.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Components/AudioComponent.h"
 #include "TimerManager.h"
 #include "Engine/Engine.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Projectile.h"
 
 ACannon::ACannon()
@@ -19,6 +21,15 @@ ACannon::ACannon()
 	CannonMesh->SetupAttachment(sceneComp);
 	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjecttileSpawnPoint"));
 	ProjectileSpawnPoint->SetupAttachment(CannonMesh);
+	ShotSound = CreateDefaultSubobject<UAudioComponent>(TEXT("ShotSound"));
+	ShotSound->SetAutoActivate(false);
+
+	ShotEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShotEffect"));
+	ShotEffect->SetAutoActivate(false);
+	ShotEffect->SetupAttachment(ProjectileSpawnPoint);
+
+	
+
 
 }
 
@@ -33,7 +44,15 @@ ACannon::ACannon()
 		bReadyToFire = false;
 		Shells--;
 
-	
+		ShotEffect->ActivateSystem();
+		ShotSound->Play();
+		if (CameraShake)
+		{
+
+			GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(CameraShake);
+				
+
+		}
 		if (CannonType == ECannonType::FireProjecttile)
 		{
 

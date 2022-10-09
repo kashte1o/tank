@@ -3,7 +3,12 @@
 #include "Components/SphereComponent.h"
 #include "DamageTaker.h"
 #include "GameStructs.h"
-
+#include "Particles\ParticleSystem.h"
+#include "Kismet\GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Particles\ParticleSystemComponent.h"
+//#include "Cannon.cpp"
+//#include "Particles/ParticleSystemComponent.h"
 
 
 AProjectile::AProjectile()
@@ -20,6 +25,8 @@ AProjectile::AProjectile()
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	ProjectileMesh->SetupAttachment(SphereCollision);
+
+	
 }
 
 void AProjectile::Start()
@@ -52,6 +59,7 @@ void AProjectile::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
 			damageData.DamageMaker = this;
 
 			DamageTakerActor->TakeDamage(damageData);
+			
 		}
 		else
 		{
@@ -59,10 +67,13 @@ void AProjectile::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
 		}
 		
 	}
-	
-	UE_LOG(LogTemp, Warning, TEXT("Projectile overlap : %s"), *OtherActor->GetName());
-	Destroy();
+	Template = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, GetActorLocation());
 
+	UE_LOG(LogTemp, Warning, TEXT("Projectile overlap : %s"), *OtherActor->GetName());
+	//HitEnemy->ActivateSystem();
+	//Template = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, GetActorLocation());
+	Destroy();
+	
 
 }
 

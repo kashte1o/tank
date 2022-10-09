@@ -1,13 +1,16 @@
 
 
+
 #include "Turret.h"
+
 #include <Components\BoxComponent.h>
 #include <Components\StaticMeshComponent.h>
 #include <Components\ArrowComponent.h>
-#include <Engine\StaticMesh.h>
-
-#include <Kismet/KismetMathLibrary.h>
+#include "Engine\StaticMesh.h"
+#include "Cannon.h"
+#include <Kismet\KismetMathLibrary.h>
 #include "HealthComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 ATurret::ATurret()
 {
@@ -38,7 +41,7 @@ ATurret::ATurret()
 	{
 		TurretMesh->SetStaticMesh(turretMeshTemp);
 	}
-	HealthComponent =CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddUObject(this, &ATurret::Destroyed);
 	HealthComponent->OnHealthChanged.AddUObject(this,&ATurret::DamageTaked);
 }
@@ -48,6 +51,10 @@ void ATurret::TakeDamage(FDamageData DamageData)
 	HealthComponent->TakeDamage(DamageData);
 }
 
+FVector ATurret::GetEyesPosition()
+{
+	return CannonSetupPoint->GetComponentLocation();
+}
 
 void ATurret::BeginPlay()
 {
@@ -61,11 +68,7 @@ void ATurret::BeginPlay()
 }
 
 
-void ATurret::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
 
 
 void ATurret::Targeting()
@@ -87,10 +90,11 @@ void ATurret::Destroyed()
 {
 	if (Cannon)
 	{
-		Cannon->Destroy();
+		Cannon->Destroyed();
 
 	}
 	Destroy();
+	Template = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, GetActorLocation());
 }
 
 void ATurret::RotateToPlayer()
@@ -131,13 +135,14 @@ void ATurret::SetupCannon()
 	{
 		return;
 	}
+
 	FActorSpawnParameters params;
 	params.Owner = this;
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
-}
 
+}
 
 
 void ATurret::DamageTaked(float Value)

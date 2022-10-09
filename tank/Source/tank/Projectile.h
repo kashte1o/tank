@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Projectile.generated.h"
+
 
 UCLASS()
 class TANK_API AProjectile : public AActor
@@ -40,5 +42,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 		float Damage = 1.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		class UParticleSystemComponent* HitEnemy;
+	
+	
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+		UParticleSystemComponent* Template;
 
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+			class UParticleSystem* Particle;
+
+		
+
+		
+
+		
 };

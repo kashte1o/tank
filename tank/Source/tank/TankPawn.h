@@ -5,17 +5,22 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "DamageTaker.h"
-#include "MachinePawn.h"
+//#include "MachinePawn.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "TankPawn.generated.h"
+
 
 class UStaticMeshComponents;
 class ACannon;
 	UCLASS()
-class TANK_API ATankPawn : public AMachinePawn, public IDamageTaker
+class TANK_API ATankPawn : public APawn, public IDamageTaker
 {
 	GENERATED_BODY()
 
 public:
+	
+
+	
 	ATankPawn();
 	virtual void Tick(float DeltaTime) override;
 
@@ -35,8 +40,23 @@ public:
 	virtual void TakeDamage(FDamageData DamageData) override;
 	
 	ACannon* GetCannon() const { return Cannon; }
+	FVector  GetTurretForwardVector() const { return TurretMesh-> GetForwardVector(); }
+	float GetMovementAccurency() const { return MovementAccurency; }
+	TArray <FVector> GetPatrollingPoints() const { return PatrollingPoints; }
+	void RotateTurretTo(FVector TargetPosition);
+
+	FVector GetEyesPosition() const;
+
 protected:
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AIComponents")
+	float MovementAccurency = 50.0f;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AIComponents", Meta = (MakeEditWidget = true))
+		TArray<FVector> PatrollingPoints;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* BodyMesh;
@@ -65,6 +85,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cannon")
 		class UArrowComponent* CannonSetupPoint;
 	
+	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+		class UParticleSystem* Particle;
+
+	UParticleSystemComponent* Template;
+
+	
 	UPROPERTY()
 		ACannon* Cannon;
 
@@ -74,6 +102,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		float RotationSpeed = 100.0f;
+
+	
 
 	void Die();
 	void DamageTaked(float Value);
