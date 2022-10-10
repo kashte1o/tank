@@ -9,10 +9,10 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/StaticMeshComponent.h"
 #include "Cannon.h"
-//#include "Cannon.cpp"
 #include "HealthComponent.h"
 #include "Components/ArrowComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "Engine\TargetPoint.h"
 // Sets default values
 ATankPawn::ATankPawn()
 {
@@ -45,14 +45,27 @@ ATankPawn::ATankPawn()
 	HealthComponent->OnDie.AddUObject(this, &ATankPawn::Die);
 	HealthComponent->OnHealthChanged.AddUObject(this, &ATankPawn::DamageTaked);
 
-	/*HitEnemy = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HitEnemy"));
-	HitEnemy->SetAutoActivate(false);
-	HitEnemy->SetupAttachment(ProjectileMes);
-	*/
+	
 
 	
 }
 
+
+TArray<FVector> ATankPawn::GetPatrollingPoints()
+{
+	TArray <FVector> points;
+	for (ATargetPoint* point : PatrollingPoints)
+	{
+		points.Add(point->GetActorLocation());
+	}
+	return points;
+}
+
+void ATankPawn::SetPatrollingPoints(TArray<ATargetPoint*> NewPatrollingPoints)
+{
+	PatrollingPoints = NewPatrollingPoints;
+
+}
 
 void ATankPawn::RotateTurretTo(FVector TargetPosition)
 {

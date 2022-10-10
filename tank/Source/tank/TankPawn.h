@@ -12,6 +12,7 @@
 
 class UStaticMeshComponents;
 class ACannon;
+class ATargetPoint;
 	UCLASS()
 class TANK_API ATankPawn : public APawn, public IDamageTaker
 {
@@ -42,7 +43,10 @@ public:
 	ACannon* GetCannon() const { return Cannon; }
 	FVector  GetTurretForwardVector() const { return TurretMesh-> GetForwardVector(); }
 	float GetMovementAccurency() const { return MovementAccurency; }
-	TArray <FVector> GetPatrollingPoints() const { return PatrollingPoints; }
+	UFUNCTION()
+		TArray <FVector> GetPatrollingPoints();
+
+	void SetPatrollingPoints(TArray<ATargetPoint*> NewPatrollingPoints);
 	void RotateTurretTo(FVector TargetPosition);
 
 	FVector GetEyesPosition() const;
@@ -55,7 +59,7 @@ protected:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AIComponents", Meta = (MakeEditWidget = true))
-		TArray<FVector> PatrollingPoints;
+		TArray<ATargetPoint*> PatrollingPoints;
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
